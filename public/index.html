@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title>Web Dice API Test</title>
+</head>
+<body style="font-family: sans-serif; padding: 1em; background-color: blueviolet;">
+  
+
+  <h1>Web Dice API Test</h1>
+
+  <button onclick="rollOne()">Roll One</button>
+  <button onclick="rollFive()">Roll Five</button>
+
+  <pre id="out"></pre>
+
+  <script>
+    // Calls SAME server (important for Azure deployment)
+    const API = location.origin
+
+    async function rollOne() {
+      const response = await fetch(`${API}/roll/1`)
+      const data = await response.json()
+      document.getElementById('out').textContent =
+        JSON.stringify(data, null, 2)
+    }
+
+    async function rollFive() {
+      const response = await fetch(`${API}/roll/5`)
+      const data = await response.json()
+      document.getElementById('out').textContent =
+        JSON.stringify(data, null, 2)
+    }
+  </script>
+
+</body>
+</html>
