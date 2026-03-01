@@ -30,6 +30,10 @@ app.get('/roll/:num', (req, res) => {
   res.json({ rolls, total })
 })
 
+app.get('/api/ping', (req, res) => {
+  res.send('ping response')
+})
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log('Server running on port ' + PORT + ' Press Ctrl+C to stop')
