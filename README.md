@@ -3,6 +3,8 @@ Coltin Rogge
 
 MERNa stands for MongoDB, Express, React, and Node on Azure. 
 
+Web Dice Roller
+
 Azure hosting notes:
 Select Node 18 LTS
 
