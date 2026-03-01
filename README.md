@@ -1,8 +1,7 @@
 # MERNa server including a template for Node.js and Express hosted on Microsoft Azure
-MERNa stands for MongoDB, Express, React, abd Node on Azure. 
+Coltin Rogge
 
-This repository serves as a template that can be used as a template to create a Node.js and Express based website hosted 
-on Microsoft Azure.
+MERNa stands for MongoDB, Express, React, and Node on Azure. 
 
 Azure hosting notes:
 Select Node 18 LTS
@@ -12,3 +11,6 @@ git clone [[your-repository-url]]
 cd [[your-repository-url]]
 npm install express
 npm start
+or
+node index.js
+Open https://localhost:3000
