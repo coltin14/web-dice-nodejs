@@ -1,7 +1,11 @@
 const express = require('express')
 const crypto = require('crypto')
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
+app.use(express.json())
 
 // Serve files from the public folder (like index.html)
 app.use(express.static('public'))
