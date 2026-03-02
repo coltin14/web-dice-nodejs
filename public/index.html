@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 
-<body onload="wakeUpServer()">
+<body onload="wakeUpServer(); rollDice()">
 
     <h1>Dice Roller</h1>
     <p id="status">Status: Connecting to Azure...</p>
@@ -32,6 +32,7 @@
           await fetch(`${API}/api/ping`)
           document.getElementById("status").textContent =
             "Status: Connected to Azure server"
+          rollDice()
         } catch {
           document.getElementById("status").textContent =
             "Status: Server unreachable"
