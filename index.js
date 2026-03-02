@@ -1,40 +1,52 @@
-const express = require('express');
-const crypto = require('crypto');
-const cors = require('cors');
+const express = require('express')
+const crypto = require('crypto')
+const cors = require('cors')
 
-const app = express();
+const app = express()
 
-// 1. THIS ROUTE HAS NO CORS (Defined before CORS middleware)
-// This will trigger the CORS failure in the browser.
 app.get('/roll-no-cors/:num', (req, res) => {
-  const num = parseInt(req.params.num);
-  const rolls = Array.from({ length: num }, () => crypto.randomInt(1, 7));
-  res.json({ rolls });
-});
+  const num = parseInt(req.params.num)
+  const rolls = []
 
-// 2. ENABLE CORS for the official frontend
-app.use(cors({
-  origin: 'https://happy-tree-01d1df610.4.azurestaticapps.net' 
-}));
-
-app.use(express.json());
-app.use(express.static('public'));
-
-// 3. WAKE UP ENDPOINT
-app.get('/api/ping', (req, res) => {
-  res.json({ status: 'online', message: 'Server is awake!' });
-});
-
-// 4. PROTECTED ROLL ROUTE (Has CORS)
-app.get('/roll/:num', (req, res) => {
-  const num = parseInt(req.params.num);
-  if (!num || num < 1 || num > 100) {
-    return res.status(400).json({ error: 'Invalid number' });
+  for (let i = 0; i < num; i++) {
+	rolls.push(crypto.randomInt(1, 7)) // gives 1–6
   }
-  const rolls = Array.from({ length: num }, () => crypto.randomInt(1, 7));
-  const total = rolls.reduce((sum, value) => sum + value, 0);
-  res.json({ rolls, total });
-});
+  res.json({ rolls })
+})
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use(cors({
+  origin: 'https://happy-tree-01d1df610.4.azurestaticapps.net'}))
+
+app.use(express.json())
+
+// Serve files from the public folder (like index.html)
+app.use(express.static('public'))
+
+// Roll N dice
+app.get('/roll/:num', (req, res) => {
+
+  const num = parseInt(req.params.num)
+
+  // Check if the number is valid
+  if (!num || num < 1 || num > 100) {
+    return res.status(400).json({ error: 'Invalid number' })
+  }
+
+  const rolls = []
+
+  for (let i = 0; i < num; i++) {
+    rolls.push(crypto.randomInt(1, 7)) // gives 1–6
+  }
+  const total = rolls.reduce((sum, value) => sum + value, 0)
+  res.json({ rolls, total })
+})
+
+app.get('/api/ping', (req, res) => {
+  res.send('ping response')
+})
+
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log('Server running on port ' + PORT + ' Press Ctrl+C to stop')
+})

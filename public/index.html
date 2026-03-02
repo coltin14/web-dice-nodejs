@@ -1,22 +1,28 @@
 <!DOCTYPE html>
+
 <html lang="en-US">
+
 <head>
+
   <meta charset="UTF-8">
+
   <title>Web Dice API Test</title>
+
 </head>
+
 <body style="font-family: sans-serif; padding: 1em; background-color: blueviolet;">
-  
 
   <h1>Web Dice API Test</h1>
 
   <button onclick="rollOne()" autofocus>Roll One</button>
+
   <button onclick="rollFive()" autofocus>Roll Five</button>
+
   <button onclick="rollFailure()" autofocus>CORS Roll Failure</button>
 
   <pre id="out"></pre>
 
   <script>
-
     const API = "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net"
 
     async function rollOne() {
@@ -43,8 +49,4 @@
         document.getElementById('out').textContent =
           "CORS error (intentional)"
       }
-    }
-  </script>
-
-</body>
-</html>
+}
