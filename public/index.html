@@ -22,6 +22,43 @@
 
     <div id="cors-out" style="margin-top: 20px; color: yellow; font-weight: bold;"></div>
 
-    <script src="index.js"></script>
+    <script>
+      const API =
+        "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net"
+
+      // Wake up server when page loads
+      async function wakeUpServer() {
+        try {
+          await fetch(`${API}/api/ping`)
+          document.getElementById("status").textContent =
+            "Status: Connected to Azure server"
+        } catch {
+          document.getElementById("status").textContent =
+            "Status: Server unreachable"
+        }
+      }
+
+      // Roll dice using server API
+      async function rollDice() {
+        const response = await fetch(`${API}/roll/5`)
+        const data = await response.json()
+
+        document.getElementById("d1").value = data.rolls[0]
+        document.getElementById("d2").value = data.rolls[1]
+        document.getElementById("d3").value = data.rolls[2]
+        document.getElementById("d4").value = data.rolls[3]
+        document.getElementById("d5").value = data.rolls[4]
+      }
+
+      // Trigger CORS failure endpoint
+      async function testCorsFailure() {
+        try {
+          await fetch(`${API}/roll-no-cors/5`)
+        } catch {
+          document.getElementById("cors-out").textContent =
+            "CORS request blocked (expected)"
+        }
+      }
+    </script>
 </body>
 </html>

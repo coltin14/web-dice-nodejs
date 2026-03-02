@@ -5,7 +5,8 @@ const path = require('path');
 
 const app = express();
 
-// 1. Defined BEFORE CORS middleware to ensure it fails for the assignment
+
+// Defined before CORS
 app.get('/roll-no-cors/:num', (req, res) => {
     const num = parseInt(req.params.num);
     const rolls = [];
@@ -15,17 +16,16 @@ app.get('/roll-no-cors/:num', (req, res) => {
     res.json({ rolls });
 });
 
-// 2. Enable CORS for your Static Web App
+// Enable CORS 
 app.use(cors({
     origin: 'https://happy-tree-01d1df610.4.azurestaticapps.net' 
 }));
 
 app.use(express.json());
 
-// 3. Serve the 'public' folder so your HTML/CSS loads
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 4. Standard Roll API
+//Standard Roll API
 app.get('/roll/:num', (req, res) => {
     const num = parseInt(req.params.num);
     if (!num || num < 1 || num > 100) {
@@ -39,12 +39,12 @@ app.get('/roll/:num', (req, res) => {
     res.json({ rolls, total });
 });
 
-// 5. Wake up endpoint
+//Wake up endpoint
 app.get('/api/ping', (req, res) => {
     res.send('ping response');
 });
 
-// 6. The Azure Port requirement
+//The Azure Port 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
