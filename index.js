@@ -1,52 +1,40 @@
-const express = require('express')
-const crypto = require('crypto')
-const cors = require('cors')
+const API_BASE = "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net";
 
-const app = express()
+//Asynchronous "Wake Up" call
+async function wakeUpServer() {
+    try {
+        const response = await fetch(`${API_BASE}/api/ping`);
+        const text = await response.text();
+        if (text === 'ping response') {
+            document.getElementById("status").textContent = "Status: Server Awake";
+        }
+    } catch (err) {
+        document.getElementById("status").textContent = "Status: Server Offline";
+    }
+}
 
-app.get('/roll-no-cors/:num', (req, res) => {
-  const num = parseInt(req.params.num)
-  const rolls = []
+//Call remote RESTful APIs for all random numbers
+async function rollDice() {
+    // We fetch 5 rolls from the server in one go
+    const response = await fetch(`${API_BASE}/roll/5`);
+    const data = await response.json();
 
-  for (let i = 0; i < num; i++) {
-	rolls.push(crypto.randomInt(1, 7)) // gives 1–6
-  }
-  res.json({ rolls })
-})
+    // Map the server-generated numbers to your UI inputs
+    document.getElementById("d1").value = data.rolls[0];
+    document.getElementById("d2").value = data.rolls[1];
+    document.getElementById("d3").value = data.rolls[2];
+    document.getElementById("d4").value = data.rolls[3];
+    document.getElementById("d5").value = data.rolls[4];
+}
 
-app.use(cors({
-  origin: 'https://happy-tree-01d1df610.4.azurestaticapps.net'}))
-
-app.use(express.json())
-
-// Serve files from the public folder (like index.html)
-app.use(express.static('public'))
-
-// Roll N dice
-app.get('/roll/:num', (req, res) => {
-
-  const num = parseInt(req.params.num)
-
-  // Check if the number is valid
-  if (!num || num < 1 || num > 100) {
-    return res.status(400).json({ error: 'Invalid number' })
-  }
-
-  const rolls = []
-
-  for (let i = 0; i < num; i++) {
-    rolls.push(crypto.randomInt(1, 7)) // gives 1–6
-  }
-  const total = rolls.reduce((sum, value) => sum + value, 0)
-  res.json({ rolls, total })
-})
-
-app.get('/api/ping', (req, res) => {
-  res.send('ping response')
-})
-
-const PORT = process.env.PORT || 3000
-
-app.listen(PORT, () => {
-  console.log('Server running on port ' + PORT + ' Press Ctrl+C to stop')
-})
+//Demonstrate a CORS failure condition
+async function testCorsFailure() {
+    try {
+        // Calling the route that lacks CORS headers
+        const response = await fetch(`${API_BASE}/roll-no-cors/5`);
+        const data = await response.json();
+        document.getElementById("cors-out").textContent = "Success (Unexpected)";
+    } catch (error) {
+        document.getElementById("cors-out").textContent = "CORS ERROR: Request Blocked (Intentional)";
+    }
+}

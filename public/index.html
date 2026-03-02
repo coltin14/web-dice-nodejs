@@ -1,51 +1,27 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <title>Azure Dice Roller</title>
+    <meta charset="UTF-8">
+    <title>Azure Dice Roller</title>
+    <link rel="stylesheet" href="index.css">
 </head>
-<body style="font-family: sans-serif; padding: 2em; background-color: #7b2cbf; color: black;">
 
-  <h1>Web Dice API Test</h1>
-  <p id="status">Status: Waking up server...</p>
+<body onload="wakeUpServer()">
 
-  <button onclick="roll(1)">Roll One</button>
-  <button onclick="roll(5)">Roll Five</button>
-  <button onclick="rollFailure()">CORS Roll Failure</button>
+    <h1>Dice Roller</h1>
+    <p id="status">Status: Connecting to Azure...</p>
 
-  <pre id="out" style="background-color: white; padding: 1em; border-radius: 8px;"></pre>
+    Die 1: <input id="d1" readonly><br><br>
+    Die 2: <input id="d2" readonly><br><br>
+    Die 3: <input id="d3" readonly><br><br>
+    Die 4: <input id="d4" readonly><br><br>
+    Die 5: <input id="d5" readonly><br><br>
 
-  <script>
-    const API = "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net";
+    <button id="rollButton" onclick="rollDice()" autofocus>Roll Dice</button>
+    <button onclick="testCorsFailure()">Test CORS Failure</button>
 
-    // ASYNCHRONOUS WAKE UP CALL
-    window.onload = async () => {
-      try {
-        const resp = await fetch(`${API}/api/ping`);
-        const data = await resp.json();
-        document.getElementById('status').textContent = `Status: ${data.message}`;
-      } catch (err) {
-        document.getElementById('status').textContent = "Status: Server offline or error.";
-      }
-    };
+    <div id="cors-out" style="margin-top: 20px; color: yellow; font-weight: bold;"></div>
 
-    async function roll(num) {
-      const response = await fetch(`${API}/roll/${num}`);
-      const data = await response.json();
-      document.getElementById('out').textContent = JSON.stringify(data, null, 2);
-    }
-
-    async function rollFailure() {
-      try {
-        // This calls the route defined BEFORE the CORS middleware
-        const response = await fetch(`${API}/roll-no-cors/5`);
-        const data = await response.json();
-        document.getElementById('out').textContent = JSON.stringify(data, null, 2);
-      } catch (error) {
-        document.getElementById('out').textContent = 
-          "CORS ERROR";
-      }
-    }
-  </script>
+    <script src="index.js"></script>
 </body>
 </html>

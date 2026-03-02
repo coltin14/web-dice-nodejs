@@ -1,0 +1,28 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f80000;
+}
+
+.dice-container {
+  margin: 20px;
+}
+
+label {
+  display: block;
+  margin: 10px;
+  font-weight: bold;
+}
+
+input {
+  width: 60px;
+  padding: 5px;
+  text-align: right;   /* Required: right-justified */
+  font-size: 18px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
