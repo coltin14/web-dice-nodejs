@@ -38,3 +38,9 @@ async function testCorsFailure() {
         document.getElementById("cors-out").textContent = "CORS ERROR: Request Blocked (Intentional)";
     }
 }
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
