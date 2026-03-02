@@ -1,51 +1,49 @@
 <!DOCTYPE html>
-
 <html lang="en-US">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <title>Web Dice API Test</title>
-
+  <title>Azure Dice Roller</title>
 </head>
-
-<body style="font-family: sans-serif; padding: 1em; background-color: blueviolet;">
+<body style="font-family: sans-serif; padding: 2em; background-color: #7b2cbf; color: white;">
 
   <h1>Web Dice API Test</h1>
+  <p id="status">Status: Waking up server...</p>
 
-  <button onclick="rollOne()" autofocus>Roll One</button>
-  <button onclick="rollFive()" autofocus>Roll Five</button>
-  <button onclick="rollFailure()" autofocus>CORS Roll Failure</button>
+  <button onclick="roll(1)">Roll One</button>
+  <button onclick="roll(5)">Roll Five</button>
+  <button onclick="rollFailure()">CORS Roll Failure</button>
 
-  <pre id="out"></pre>
+  <pre id="out" style="background-color: lightgray; padding: 1em; border-radius: 8px;"></pre>
 
   <script>
-    const API = "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net"
+    const API = "https://web-dice-roller-nodejs-fhggc7e2hyakdcep.centralus-01.azurewebsites.net";
 
-    async function rollOne() {
-      const response = await fetch(`${API}/roll/1`)
-      const data = await response.json()
-      document.getElementById('out').textContent =
-        JSON.stringify(data, null, 2)
-    }
+    // ASYNCHRONOUS WAKE UP CALL
+    window.onload = async () => {
+      try {
+        const resp = await fetch(`${API}/api/ping`);
+        const data = await resp.json();
+        document.getElementById('status').textContent = `Status: ${data.message}`;
+      } catch (err) {
+        document.getElementById('status').textContent = "Status: Server offline or error.";
+      }
+    };
 
-    async function rollFive() {
-      const response = await fetch(`${API}/roll/5`)
-      const data = await response.json()
-      document.getElementById('out').textContent =
-        JSON.stringify(data, null, 2)
+    async function roll(num) {
+      const response = await fetch(`${API}/roll/${num}`);
+      const data = await response.json();
+      document.getElementById('out').textContent = JSON.stringify(data, null, 2);
     }
 
     async function rollFailure() {
       try {
-        const response = await fetch(`${API}/roll-no-cors/5`)
-        const data = await response.json()
-        document.getElementById('out').textContent =
-          JSON.stringify(data, null, 2)
+        // This calls the route defined BEFORE the CORS middleware
+        const response = await fetch(`${API}/roll-no-cors/5`);
+        const data = await response.json();
+        document.getElementById('out').textContent = JSON.stringify(data, null, 2);
       } catch (error) {
-        document.getElementById('out').textContent =
-          "CORS error (intentional)"
+        document.getElementById('out').textContent = 
+          "CORS ERROR: The browser blocked this request because the server did not send the correct headers for this specific route.";
       }
     }
   </script>
