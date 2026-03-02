@@ -8,6 +8,10 @@ Web Dice Roller
 Azure hosting notes:
 Select Node 18 LTS
 
+Help:
+I use chatGPT for some help more specifically for the numbers part because I couldn't use Math.random(), 
+and the use of crypto came from it, which I forgot was a bult in feature in NodeJS.
+
 To execute locally:
 git clone [[your-repository-url]]
 cd [[your-repository-url]]
